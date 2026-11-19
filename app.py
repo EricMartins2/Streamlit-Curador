@@ -213,14 +213,21 @@ def supa_rpc(funcao: str, corpo: dict) -> dict:
     return resp.json()
 
 
+def descrever_erro(erro: Exception) -> str:
+    """Resumo técnico do erro (nunca inclui as chaves) para facilitar o diagnóstico."""
+    if isinstance(erro, requests.HTTPError) and erro.response is not None:
+        return f"HTTP {erro.response.status_code}: {erro.response.text[:250]}"
+    return f"{type(erro).__name__}: {str(erro)[:200]}"
+
+
 def consultar_codigo(codigo: str):
     """Mostra o que o código libera e quanto já foi usado (sem gastar cota)."""
     if not codigo.strip():
         return None
     try:
         return supa_rpc("status_codigo", {"p_codigo": codigo.strip()})
-    except Exception:
-        return {"ok": False, "motivo": "erro_servico"}
+    except Exception as erro:
+        return {"ok": False, "motivo": "erro_servico", "detalhe": descrever_erro(erro)}
 
 
 # -----------------------------------------------------------------------------
@@ -275,6 +282,8 @@ with st.sidebar:
                        f"hoje: {info.get('usados_dia')}/{info.get('limite_diario')}")
         elif info:
             st.error(MENSAGENS.get(info.get("motivo"), "Código inválido."))
+            if info.get("detalhe"):
+                st.caption(f"Detalhe técnico: {info['detalhe']}")
 
     # Verificações feitas em silêncio (só aparecem se algo estiver errado)
     problemas = []
@@ -317,8 +326,9 @@ if gerar:
                 reserva = supa_rpc("reservar_uso", {"p_codigo": codigo.strip(), "p_versao": chave})
                 liberado = bool(reserva.get("ok"))
                 motivo = MENSAGENS.get(reserva.get("motivo"), "Acesso negado.")
-            except Exception:
-                liberado, motivo = False, MENSAGENS["erro_servico"]
+            except Exception as erro:
+                liberado = False
+                motivo = f"{MENSAGENS['erro_servico']}  (Detalhe técnico: {descrever_erro(erro)})"
 
         if not liberado:
             st.error(motivo)
