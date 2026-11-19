@@ -133,22 +133,22 @@ def extrair_texto(resposta) -> str:
 # -----------------------------------------------------------------------------
 PLANOS = {
     "N0": {
-        "nome": "Básico", "preco": "R$ 49,90", "limite": "10 matérias/mês",
+        "nome": "Básico", "preco": "R$ 42,00", "limite": "10 matérias/mês",
         "itens": ["Agente único (rápido e simples)", "Pesquisa, apuração, verificação e redação",
                   "Matéria em Markdown para baixar"],
     },
     "N1": {
-        "nome": "Padrão", "preco": "R$ 59,90", "limite": "20 matérias/mês",
+        "nome": "Padrão", "preco": "R$ 52,00", "limite": "20 matérias/mês",
         "itens": ["Agente único com skills em arquivos", "Mesmo fluxo completo do Básico",
                   "Instruções mais fáceis de evoluir"],
     },
     "N2": {
-        "nome": "Pro", "preco": "R$ 79,90", "limite": "30 matérias/mês",
+        "nome": "Pro", "preco": "R$ 71,99", "limite": "30 matérias/mês",
         "itens": ["Equipe de 4 agentes especialistas", "Citações [1], [2] e seção de Referências",
                   "Cada etapa salva em arquivo"],
     },
     "N3": {
-        "nome": "Premium", "preco": "R$ 119,90", "limite": "50 matérias/mês",
+        "nome": "Premium", "preco": "R$ 118,89", "limite": "50 matérias/mês",
         "itens": ["Equipe (Team) na pesquisa", "Regra de mínimo de fontes",
                   "Aviso automático quando há poucas fontes", "Prioridade nas novidades"],
     },
